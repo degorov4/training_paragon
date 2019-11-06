@@ -6,9 +6,10 @@
     - name: start container
       docker_container:
         name: "ubuntu"
-        hostname: "ubuntu"
-        image: "ubuntu"
+        hostname: "ubuntu.local"
+        image: "fnndsc/ubuntu-python3"
         state: started
+        published_ports: 80:80
         tty: true
         keep_volumes: false
         privileged: true
@@ -24,3 +25,8 @@
         groups: docker
       changed_when: false
 
+- hosts: ubuntu
+  gather_facts: true
+  connection: docker
+  roles:
+    - role: geerlingguy.nginx
