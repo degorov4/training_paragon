@@ -1,0 +1,40 @@
+---
+- hosts: localhost
+  gather_facts: true
+  connection: local
+  tasks:
+    - name: start container
+      docker_container:
+        name: "ubuntu"
+        hostname: "ubuntu.local"
+        image: "fnndsc/ubuntu-python3"
+        state: started
+        published_ports: 80:80
+        tty: true
+        keep_volumes: false
+        privileged: true
+        volumes:
+          - /sys/fs/cgroup:/sys/fs/cgroup:ro
+
+    - name: add container to inventory
+      add_host:
+        name: "ubuntu"
+        ansible_host: "ubuntu"
+        ansible_user: root
+        ansible_connection: docker
+        groups: docker
+      changed_when: false
+
+- hosts: ubuntu
+  gather_facts: true
+  connection: docker
+  roles:
+    - role: geerlingguy.nginx
+
+- hosts: ubuntu
+  gather_facts: false
+  connection: docker
+  tasks:
+    - name: make sure that Nginx is running on 80 port and returns a status 200
+      uri:
+        url: http://localhost:80
