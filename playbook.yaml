@@ -1,0 +1,26 @@
+---
+- hosts: localhost
+  gather_facts: true
+  connection: local
+  tasks:
+    - name: start container
+      docker_container:
+        name: "ubuntu"
+        hostname: "ubuntu"
+        image: "ubuntu"
+        state: started
+        tty: true
+        keep_volumes: false
+        privileged: true
+        volumes:
+          - /sys/fs/cgroup:/sys/fs/cgroup:ro
+
+    - name: add container to inventory
+      add_host:
+        name: "ubuntu"
+        ansible_host: "ubuntu"
+        ansible_user: root
+        ansible_connection: docker
+        groups: docker
+      changed_when: false
+
