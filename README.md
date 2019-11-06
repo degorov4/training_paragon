@@ -15,7 +15,7 @@ To run this playbook you need installed Docker on localhost machine. Please refe
 
 ### Required sources
 
-This project contains ansible-galaxy Nginx role and Ubuntu image for fast start. Please execute following command for preparing Ansbile run:
+This project contains ansible-galaxy Nginx role and Ubuntu image (with python3) for fast start. Please execute following command for preparing Ansbile run:
 
 ```bash
 ansible-galaxy install --roles-path /etc/ansible/roles geerlingguy.nginx
